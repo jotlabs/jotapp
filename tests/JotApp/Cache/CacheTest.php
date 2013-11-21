@@ -14,7 +14,13 @@ class UnitTestCache implements Cache {
     }
     
     public function get($key) {
-        return $this->cache[$key];
+        $response = NULL;
+
+        if ($this->exists($key)) {
+            $response = $this->cache[$key];
+        }
+
+        return $response;
     }
 
     public function set($key, $value) {
@@ -48,6 +54,26 @@ class CacheTest extends PHPUnit_Framework_TestCase {
 
         $this->cache->delete($key);
         $this->assertFalse($this->cache->exists($key));
+    }
+
+    public function testCacheGetSet() {
+        $key = 'unit-test-key';
+        $value = time();
+
+        $this->cache->set($key, $value);
+
+        $response = $this->cache->get($key);
+        $this->assertEquals($value, $response);
+
+        $newValue = 'NEW ' . $value;
+        $this->cache->set($key, $newValue);
+
+        $response = $this->cache->get($key);
+        $this->assertEquals($newValue, $response);
+
+        $this->cache->delete($key);
+        $response = $this->cache->get($key);
+        $this->assertNull($response);
     }
 
 }
