@@ -39,6 +39,17 @@ class CacheTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue(is_a($this->cache, 'JotApp\Cache\Cache'));
     }
 
+    public function testKeyExists() {
+        $key = 'unit-test-key';
+        $this->assertFalse($this->cache->exists($key));
+        
+        $this->cache->set($key, 1);
+        $this->assertTrue($this->cache->exists($key));
+
+        $this->cache->delete($key);
+        $this->assertFalse($this->cache->exists($key));
+    }
+
 }
 
 ?>
