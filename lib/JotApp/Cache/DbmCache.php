@@ -63,6 +63,7 @@ class DbmCache implements Cache {
 
     public function set($key, $value) {
         $this->_init();
+        $this->_setWriteable();
         return dba_replace($key, $value, $this->dbm);
     }
 
@@ -70,6 +71,15 @@ class DbmCache implements Cache {
     public function delete($key) {
         $this->_init();
         return dba_delete($key, $this->dbm);
+    }
+
+
+    protected function _setWriteable() {
+        if ($this->dbmMode === self::MODE_READABLE) {
+            $this->_close();
+            $this->setMode(self::WRITEABLE);
+            $this->_init();
+        }
     }
 
 
@@ -98,7 +108,6 @@ class DbmCache implements Cache {
             $this->dbm = NULL;
         }
     }
-
 
 }
 
