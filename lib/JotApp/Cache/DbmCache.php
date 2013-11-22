@@ -5,6 +5,7 @@ namespace JotApp\Cache;
 use JotApp\Cache\Cache;
 
 class DbmCache implements Cache {
+    // DBM modes in ascending order of capabilities
     const MODE_READABLE  = 'r';
     const MODE_WRITEABLE = 'w';
     const MODE_CREATABLE = 'c';
@@ -34,8 +35,13 @@ class DbmCache implements Cache {
         }
     }
 
-    public function setFilePath($filePath) {
+    public function setFilePath($filePath, $dbmType = NULL) {
         $this->dbmFile = $filePath;
+
+        if ($dbmType) {
+            // TODO: Check that the type is supported by PHP instance
+            $this->dbmType = $dbmType;
+        }
     }
 
     public function setMode($mode) {
@@ -74,6 +80,9 @@ class DbmCache implements Cache {
     }
 
 
+    /**
+        _setWriteable -- sets the dbm file to writeable if it's in a readable state.
+    **/
     protected function _setWriteable() {
         if ($this->dbmMode === self::MODE_READABLE) {
             $this->_close();
@@ -83,6 +92,9 @@ class DbmCache implements Cache {
     }
 
 
+    /**
+        _init -- initialises a new dbm connection
+    **/
     protected function _init() {
         if (!$this->dbm) {
             $this->_connect();
@@ -90,6 +102,9 @@ class DbmCache implements Cache {
     }
 
 
+    /**
+        _connect -- connects to the dbm file, given the path, mode and dbm type
+    **/
     protected function _connect() {
         $dbm = dba_open($this->dbmFile, $this->dbmMode, $this->dbmType);
 
@@ -102,6 +117,9 @@ class DbmCache implements Cache {
     }
 
 
+    /**
+        _close -- closes the current dbm file handle
+    **/
     protected function _close() {
         if ($this->dbm) {
             dba_close($this->dbm);
