@@ -8,6 +8,7 @@ class DbmCacheTest extends PHPUnit_Framework_TestCase {
     public function setUp() {
         $this->cache = new DbmCache();
         $this->cache->setFilePath('/tmp/unit-test-' . time() . '.db');
+        $this->cache->setMode('c'); // Writeable for unit tests
     }
 
     public function tearDown() {

@@ -6,7 +6,7 @@ use JotApp\Cache\Cache;
 
 class DbmCache implements Cache {
     private $dbmFile;
-    private $dbmMode = 'n';
+    private $dbmMode = 'r';
     private $dbmType;
     private $dbm;
 
@@ -31,6 +31,10 @@ class DbmCache implements Cache {
 
     public function setFilePath($filePath) {
         $this->dbmFile = $filePath;
+    }
+
+    public function setMode($mode) {
+        $this->dbmMode = $mode;
     }
 
 
