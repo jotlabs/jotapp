@@ -3,6 +3,8 @@
 namespace JotApp\Cache;
 
 use JotApp\Cache\Cache;
+use JotApp\Cache\Exceptions\CacheFileNotFoundException;
+use JotApp\Cache\Exceptions\CacheInvalidDbmTypeException;
 
 class DbmCache implements Cache {
     // DBM modes in ascending order of capabilities
@@ -32,15 +34,17 @@ class DbmCache implements Cache {
         }
     }
 
+
     public function setFilePath($filePath, $dbmType = NULL) {
         $this->dbmFile = $filePath;
 
         if ($this->_isDbmTypeEnabled($dbmType)) {
             $this->dbmType = $dbmType;
         } elseif ($dbmType) {
-
+            throw new CacheInvalidDbmTypeException("DBM type $dbmType not enabled");
         }
     }
+
 
     public function setMode($mode) {
         $this->dbmMode = $mode;
@@ -96,7 +100,7 @@ class DbmCache implements Cache {
     protected function _init() {
         if (!$this->dbm) {
             if (empty($this->dbmFile)) {
-                // TODO: throw exception
+                throw new CacheFileNotFoundException("DBM file not specified");
             }
             $this->_connect();
         }
