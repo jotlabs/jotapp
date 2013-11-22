@@ -35,9 +35,10 @@ class DbmCache implements Cache {
     public function setFilePath($filePath, $dbmType = NULL) {
         $this->dbmFile = $filePath;
 
-        if ($dbmType) {
-            // TODO: Check that the type is supported by PHP instance
+        if ($this->_isDbmTypeEnabled($dbmType)) {
             $this->dbmType = $dbmType;
+        } elseif ($dbmType) {
+
         }
     }
 
@@ -94,6 +95,9 @@ class DbmCache implements Cache {
     **/
     protected function _init() {
         if (!$this->dbm) {
+            if (empty($this->dbmFile)) {
+                // TODO: throw exception
+            }
             $this->_connect();
         }
     }
@@ -122,6 +126,12 @@ class DbmCache implements Cache {
             dba_close($this->dbm);
             $this->dbm = NULL;
         }
+    }
+
+
+    protected function _isDbmTypeEnabled($dbmType) {
+        $supportedTypes = dba_handlers();
+        return !empty($dbmType) && in_array($dbmType, $supportedTypes);
     }
 
 }
