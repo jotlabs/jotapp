@@ -5,8 +5,13 @@ namespace JotApp\Cache;
 use JotApp\Cache\Cache;
 
 class DbmCache implements Cache {
+    const MODE_READABLE  = 'r';
+    const MODE_WRITEABLE = 'w';
+    const MODE_CREATABLE = 'c';
+    const MODE_TRUNCATE  = 'n';
+
     private $dbmFile;
-    private $dbmMode = 'r';
+    private $dbmMode = self::MODE_READABLE;
     private $dbmType;
     private $dbm;
 
@@ -93,6 +98,7 @@ class DbmCache implements Cache {
             $this->dbm = NULL;
         }
     }
+
 
 }
 
