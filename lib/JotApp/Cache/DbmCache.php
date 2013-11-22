@@ -13,14 +13,11 @@ class DbmCache implements Cache {
 
     private $dbmFile;
     private $dbmMode = self::MODE_READABLE;
-    private $dbmType;
+    private $dbmType = 'db4'; // Default handler BDB4+
     private $dbm;
 
     
     public function __construct() {
-        // TODO: Get these settings from config
-        $this->dbmFile = '/tmp/test.db';
-        $this->dbmType = 'db4';
     }
 
     
