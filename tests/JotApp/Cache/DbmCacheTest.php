@@ -22,7 +22,25 @@ class DbmCacheTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue(is_a($this->cache, 'JotApp\Cache\Cache'));
 
     }
-   
+
+    /**
+     * @expectedException JotApp\Cache\Exceptions\CacheInvalidDbmTypeException
+     **/
+    public function testDbmTypeExists() {
+        $cache = new Dbmcache();
+        $cache->setFilePath('/tmp/unit-test-' . time() . '.db', 'NONE');
+    }
+  
+ 
+    /**
+     * @expectedException JotApp\Cache\Exceptions\CacheFileNotFoundException
+     **/
+    public function testDbmFileSpecified() {
+        $cache = new Dbmcache();
+        $cache->exists('UNKNOWN_KEY');
+    }
+  
+ 
     public function testExists() {
         $key = 'unit-test-key';
 
