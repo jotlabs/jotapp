@@ -67,11 +67,13 @@ class ApplicationBase {
 
 
     protected function _initAppModel() {
-        if (empty($this->appModel) && $this->appModelClass && class_exists($this->appModelClass)) {
-            $className = $this->appModelClass;
-            $appModel = new $className();
-            $appModel->addDataSource($this->config->datasources['__DEFAULT__']);
-            $this->appModel = $appModel;
+        if (empty($this->appModel)) {
+            if (!empty($this->appModelClass) && class_exists($this->appModelClass)) {
+                $className = $this->appModelClass;
+                $appModel = new $className();
+                $appModel->addDataSource($this->config->datasources['__DEFAULT__']);
+                $this->appModel = $appModel;
+            }
         }
 
         return $this->appModel;
