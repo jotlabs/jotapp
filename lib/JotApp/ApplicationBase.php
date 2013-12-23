@@ -38,10 +38,10 @@ class ApplicationBase {
             $className = $this->controllers[$controllerName];
 
             if (class_exists($className)) {
-                $appModel = $this->getAppModel();
-                $controllerClass = new $className($appModel);
+                $controllerClass = new $className();
 
                 if (is_a($controllerClass, 'JotApp\Controller')) {
+                    $this->_injectController($controllerClass);
                     $this->controllerCache[$controllerName] = $controllerClass;
                 }
 
